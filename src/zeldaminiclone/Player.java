@@ -18,17 +18,17 @@ public class Player extends Rectangle{
 		
 //		POSIÇÃO X
 		
-		if (right) {
+		if (right && World.isFree(x+spd, y)) {
 			x += spd;
-		}else if(left){
+		}else if(left && World.isFree(x-spd, y)){
 			x -= spd;
 		}
 		
 //		POSIÇÃO Y
 		
-		if (up) {
+		if (up && World.isFree(x, y-spd)) {
 			y -= spd;
-		}else if(down){
+		}else if(down && World.isFree(x, y+spd)){
 			y += spd;
 		}
 	}
