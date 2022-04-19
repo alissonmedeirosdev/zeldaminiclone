@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -15,17 +17,24 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static int WIDTH = 480, HEIGHT = 480;
 	public Player player; 
 	public World world;
+	public List<Enemy> enemy = new ArrayList<Enemy>();
 	
 	public Game() {
 		this.addKeyListener(this);
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		
-		player = new Player(32,32);
+		new Spritesheet();
 		world = new World();
+		player = new Player(32,32);
+		enemy.add(new Enemy(32,32));
+		
 	}
 	
 	public void tick() {
 		player.tick();
+		
+		for(int i = 0; i < enemy.size(); i++) {
+			enemy.get(i).tick();
+		}
 	}
 	
 	public void render() {
@@ -40,12 +49,17 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		
 //		Para não ficar piscando
-		g.setColor(Color.black);
+		g.setColor(new Color(0,135,13));
 		g.fillRect(0,0, WIDTH, HEIGHT);
 		
 //		==============================================================
 		
 		player.render(g);
+		
+		for(int i = 0; i < enemy.size(); i++) {
+			enemy.get(i).render(g);
+		}
+		
 		world.render(g);
 		
 //		==============================================================
@@ -109,6 +123,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			player.right = false;
 		}else if (e.getExtendedKeyCode() == KeyEvent.VK_LEFT ) {
 			player.left = false;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_Z) {
+			player.shoot = true;
 		}
 		
 		if (e.getExtendedKeyCode() == KeyEvent.VK_UP) {

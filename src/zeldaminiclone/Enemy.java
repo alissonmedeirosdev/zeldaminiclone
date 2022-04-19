@@ -6,10 +6,10 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Rectangle{
+public class Enemy extends Rectangle{
 
 	public int spd = 4;
-	public boolean right, left, up, down;
+	public int right = 1, left = 0, up = 0, down = 0;
 	
 //	VARIAVEIS DE ANIMAÇÃO
 	public int curAnimation = 0;
@@ -21,33 +21,15 @@ public class Player extends Rectangle{
 	
 	public int dir = 1;
 	
-	public Player(int x, int y) {
+	public Enemy(int x, int y) {
 		super(x,y, 32, 32);
 	}
 	
 	public void tick() {
-		boolean moved = false;
+		boolean moved = true;
 		
-//		POSIÇÃO X
-		
-		if (right && World.isFree(x+spd, y)) {
-			x += spd;
-			moved = true;
-			dir = 1;
-		}else if(left && World.isFree(x-spd, y)){
-			x -= spd;
-			moved = true;
-			dir = -1;
-		}
-		
-//		POSIÇÃO Y
-		
-		if (up && World.isFree(x, y-spd)) {
-			y -= spd;
-			moved = true;
-		}else if(down && World.isFree(x, y+spd)){
-			y += spd;
-			moved = true;
+		if(right == 1 && World.isFree(x + 1, y)) {
+			x++;
 		}
 		
 		if(moved) {
@@ -55,7 +37,7 @@ public class Player extends Rectangle{
 		if(curFrames == targetFrames) {
 			curFrames = 0;
 			curAnimation++;
-			if(curAnimation == Spritesheet.player_front.length) {
+			if(curAnimation == Spritesheet.enemy_front.length) {
 				curAnimation = 0;
 			}
 		}
@@ -79,7 +61,7 @@ public class Player extends Rectangle{
 //		g.setColor(Color.blue);
 //		g.fillRect(x, y, width, height);
 		
-		g.drawImage(Spritesheet.player_front[curAnimation], x, y, 32,32, null);
+		g.drawImage(Spritesheet.enemy_front[curAnimation], x, y, 32,32, null);
 		
 		for(int i = 0; i < bullets.size(); i++) {
 			bullets.get(i).render(g);
